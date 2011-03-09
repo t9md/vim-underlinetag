@@ -68,7 +68,6 @@ endfunction "}}}
 "=================================================================
 command! UnderlilneTagToggle   :call s:underlinetag_toggle()
 command! UnderlilneTagGenerate :call s:underlinetag_syntax_gen()
-nnoremap <Space>] :<C-u>UnderlilneTagToggle<CR>
 " }}}
 
 let &cpo = s:old_cpo
