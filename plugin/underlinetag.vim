@@ -66,8 +66,8 @@ endfunction "}}}
 "}}}
 " Command {{{
 "=================================================================
-command! UnderlilneTagToggle   :call s:underlinetag_toggle()
-command! UnderlilneTagGenerate :call s:underlinetag_syntax_gen()
+command! UnderlineTagToggle   :call s:underlinetag_toggle()
+command! UnderlineTagGenerate :call s:underlinetag_syntax_gen()
 " }}}
 
 let &cpo = s:old_cpo

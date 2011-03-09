@@ -10,14 +10,15 @@ How to use?
 Generate syntax file
 ----------------------
 following command generate vim syntax file.
-This file is sourced when you call function `UnderlilneTagToggle`
+This file is sourced when you call function `UnderlineTagToggle`
 
-    :UnderlilneTagGenerate
+    :UnderlineTagGenerate
 
 Underline or Un-Underline
 ----------------------
-    :UnderlilneTagToggle
+    :UnderlineTagToggle
 
 Mapping suggestion
 ----------------------
-    nnoremap <Space>] :<C-u>UnderlilneTagToggle<CR>
+
+    nnoremap <Space>] :<C-u>UnderlineTagToggle<CR>
