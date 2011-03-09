@@ -80,6 +80,7 @@ function! s:underlinetag(flag) "{{{
     syn clear UnderlineTag
   endif
   let b:underlinetag = a:flag
+  return b:underlinetag
 endfunction "}}}
 "}}}
 
