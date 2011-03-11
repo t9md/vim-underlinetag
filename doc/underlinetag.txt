@@ -1,6 +1,6 @@
 *underlinetag.txt*	underline tagged word to know the word hyperlinked
 
-Version: 0.2
+Version: 0.5
 Author : t9md <taqumd@gmail.com>
 
 ==============================================================================
