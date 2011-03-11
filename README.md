@@ -9,9 +9,13 @@ How to use?
 ================================
 Underline
 ----------------------
-    :UnderlineTagToggle
+    :UnderlineTagOn
 
-Crear Underline
+Crear
+----------------------
+    :UnderlineTagOff
+
+Toggle
 ----------------------
     :UnderlineTagToggle
 
