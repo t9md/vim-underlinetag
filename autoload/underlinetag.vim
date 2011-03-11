@@ -15,26 +15,7 @@ let g:loaded_underlinetag = 1
 let s:old_cpo = &cpo
 set cpo&vim
 " }}}
-
-" Init {{{
-"=================================================================
-" used to store syntax command for each file of tagfiles()
-let g:underlinetag_syntable = {}
-
-" controll enabled or disabled globally
-let g:underlinetag = 1
-
-" is used when highlight tagged keyword
-let g:underlinetag_file = exists('g:underlinetag_file')
-      \ ? g:underlinetag_file
-      \ : 'underlinetag_syntax.vim'
-
-let g:underlinetag_highlight = exists('g:underlinetag_highlight')
-      \ ? g:underlinetag_highlight
-      \ : 'gui=underline cterm=underline term=underline'
-
 let s:syn_cmd_format = 'syntax keyword UnderlineTag %s containedin=ALLBUT,.*String.*,.*Comment.*,cIncluded,.*Function.*'
-"}}}
 
 " Function {{{
 "=================================================================
@@ -68,13 +49,13 @@ function! s:execute_highlight() "{{{
   exe 'highlight UnderlineTag ' . g:underlinetag_highlight
 endfunction "}}}
 
-function! s:underlinetag_toggle() "{{{
+function! underlinetag#toggle() "{{{
   " if g:underlinetag == 0 | return | endif
   if !exists('b:underlinetag') | let b:underlinetag = 0 | endif
-  call s:underlinetag(!b:underlinetag)
+  call underlinetag#do(!b:underlinetag)
 endfunction "}}}
 
-function! s:underlinetag(flag) "{{{
+function! underlinetag#do(flag) "{{{
   " if g:underlinetag == 0 | return | endif
   if a:flag == 1
     call s:execute_highlight()
@@ -87,15 +68,6 @@ function! s:underlinetag(flag) "{{{
   return status
 endfunction "}}}
 "}}}
-" Command {{{
-"=================================================================
-command! UnderlineTagEnable   :let g:underlinettag = 1
-command! UnderlineTagDisable  :let g:underlinettag = 0
-command! UnderlineTagGenerate :call s:underlinetag_syntax_gen()
-command! UnderlineTagOn       :call s:underlinetag(1)
-command! UnderlineTagOff      :call s:underlinetag(0)
-command! UnderlineTagToggle   :call s:underlinetag_toggle()
-" }}}
 
 let &cpo = s:old_cpo
 " vim: foldmethod=marker
