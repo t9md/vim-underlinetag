@@ -21,7 +21,10 @@ let g:underlinetag = 0
 let g:underlinetag_file = exists('g:underlinetag_file')
       \ ? g:underlinetag_file
       \ : 'underlinetag_syntax.vim'
-" let g:underlinetag_highlight = 'gui=underline cterm=underline term=underline'
+
+let g:underlinetag_highlight = exists('g:underlinetag_highlight')
+      \ ? g:underlinetag_highlight
+      \ : 'gui=underline cterm=underline term=underline'
 
 "}}}
 " Function {{{
@@ -43,53 +46,45 @@ function! s:prepare(tag_file) "{{{
 endfunction "}}}
 
 function! s:underlinetag_syntax_gen() "{{{
-  let tag_files = tagfiles()
   let result = []
-  for tag_file in tag_files
-    call add(result,s:prepare('tags'))
+  for tagfile in tagfiles()
+    call add(result,s:prepare(tagfiles))
   endfor
   call filter(result, '!empty(v:val)')
   call writefile(result, g:underlinetag_file)
 endfunction "}}}
 
-function! s:underlinetag_highlight_cmd() "{{{
-  if !exists('s:cmd')
-    let s:cmd = exists('g:underlinetag_highlight')
-          \ ? g:underlinetag_highlight
-          \ : 'gui=underline cterm=underline term=underline'
-  endif
-  return s:cmd
-endfunction "}}}
-
 function! s:underlinetag_toggle() "{{{
-  if !exists('b:underlinetag')
-    let b:underlinetag = 0
-  endif
-  let b:underlinetag = s:underlinetag(!b:underlinetag)
+  if g:underlinetag == 0 | return | endif
+  if !exists('b:underlinetag') | let b:underlinetag = 0 | endif
+  call s:underlinetag(!b:underlinetag)
 endfunction "}}}
 
 function! s:underlinetag(flag) "{{{
+  if g:underlinetag == 0 | return | endif
   if !filereadable(g:underlinetag_file)
-    let b:underlinetag = a:flag
-    return 0
-  endif
-  if a:flag == 1
+    let status = 0
+  elseif a:flag == 1
     execute 'silent! source ' . g:underlinetag_file
-    exe 'highlight UnderlineTag ' . s:underlinetag_highlight_cmd()
-  else
+    exe 'highlight UnderlineTag ' . g:underlinetag_highlight
+    let status = 1
+  elseif a:flag == 0
     syn clear UnderlineTag
+    let status = 0
   endif
-  let b:underlinetag = a:flag
-  return b:underlinetag
+  let b:underlinetag = status
+  return status
 endfunction "}}}
 "}}}
 
 " Command {{{
 "=================================================================
-command! UnderlineTagToggle   :call s:underlinetag_toggle()
+command! UnderlineTagEnable   :let g:underlinettag = 1
+command! UnderlineTagDisable  :let g:underlinettag = 0
 command! UnderlineTagGenerate :call s:underlinetag_syntax_gen()
 command! UnderlineTagOn       :call s:underlinetag(1)
 command! UnderlineTagOff      :call s:underlinetag(0)
+command! UnderlineTagToggle   :call s:underlinetag_toggle()
 " }}}
 
 let &cpo = s:old_cpo
