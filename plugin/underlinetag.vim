@@ -1,7 +1,7 @@
 "=============================================================================
 " File: underlinetag.vim
 " Author: t9md <taqumd@gmail.com>
-" Version: 0.1.0
+" Version: 0.2
 " WebPage: http://github.com/t9md/vim-undelinetag
 " License: BSD
 
@@ -15,9 +15,16 @@ let g:loaded_underlinetag = 1
 let s:old_cpo = &cpo
 set cpo&vim
 " }}}
+
 " Init {{{
 "=================================================================
-let g:underlinetag = 0
+" used to store syntax command for each file of tagfiles()
+let g:underlinetag_syntable = {}
+
+" controll enabled or disabled globally
+let g:underlinetag = 1
+
+" is used when highlight tagged keyword
 let g:underlinetag_file = exists('g:underlinetag_file')
       \ ? g:underlinetag_file
       \ : 'underlinetag_syntax.vim'
@@ -26,49 +33,53 @@ let g:underlinetag_highlight = exists('g:underlinetag_highlight')
       \ ? g:underlinetag_highlight
       \ : 'gui=underline cterm=underline term=underline'
 
+let s:syn_cmd_format = 'syntax keyword UnderlineTag %s containedin=ALLBUT,.*String.*,.*Comment.*,cIncluded,.*Function.*'
 "}}}
+
 " Function {{{
 "=================================================================
-
 function! s:uniq(list) "{{{
   let dic = {}
   for e in a:list | let dic[e] = 1 | endfor
   return keys(dic)
 endfunction "}}}
 
-function! s:prepare(tag_file) "{{{
-  if !filereadable(a:tag_file)
-    return ""
-  endif
-  let format = 'syntax keyword UnderlineTag %s containedin=ALLBUT,.*String.*,.*Comment.*,cIncluded,.*Function.*'
+function! s:gen_syn_cmd(tag_file) "{{{
   let keywords = map(readfile(a:tag_file),'split(v:val,"\t")[0]')
-  return printf(format, join(s:uniq(keywords), " "))
+  return printf(s:syn_cmd_format, join(s:uniq(keywords), " "))
 endfunction "}}}
 
-function! s:underlinetag_syntax_gen() "{{{
-  let result = []
-  for tagfile in tagfiles()
-    call add(result,s:prepare(tagfiles))
+function! s:underlinetag_syntax_gen(tagfile) "{{{
+  call map(map(tagfiles(), 'fnamemodify(v:val, ":p")'),
+        \ 'let g:underlinetag_syntable[v:val] = s:gen_syn_cmd(v:val)')
+endfunction "}}}
+
+function! s:execute_highlight() "{{{
+  let tagfiles = map(tagfiles(), 'fnamemodify(v:val, ":p")')
+  for tagfile in tagfiles
+    if !has_key(g:underlinetag_syntable, tagfile)
+      let g:underlinetag_syntable[tagfile] = s:gen_syn_cmd(tagfile)
+    endif
   endfor
-  call filter(result, '!empty(v:val)')
-  call writefile(result, g:underlinetag_file)
+
+  for tagfile in tagfiles
+    execute 'silent! ' . g:underlinetag_syntable[tagfile]
+  endfor
+  exe 'highlight UnderlineTag ' . g:underlinetag_highlight
 endfunction "}}}
 
 function! s:underlinetag_toggle() "{{{
-  if g:underlinetag == 0 | return | endif
+  " if g:underlinetag == 0 | return | endif
   if !exists('b:underlinetag') | let b:underlinetag = 0 | endif
   call s:underlinetag(!b:underlinetag)
 endfunction "}}}
 
 function! s:underlinetag(flag) "{{{
-  if g:underlinetag == 0 | return | endif
-  if !filereadable(g:underlinetag_file)
-    let status = 0
-  elseif a:flag == 1
-    execute 'silent! source ' . g:underlinetag_file
-    exe 'highlight UnderlineTag ' . g:underlinetag_highlight
+  " if g:underlinetag == 0 | return | endif
+  if a:flag == 1
+    call s:execute_highlight()
     let status = 1
-  elseif a:flag == 0
+  else
     syn clear UnderlineTag
     let status = 0
   endif
@@ -76,7 +87,6 @@ function! s:underlinetag(flag) "{{{
   return status
 endfunction "}}}
 "}}}
-
 " Command {{{
 "=================================================================
 command! UnderlineTagEnable   :let g:underlinettag = 1
