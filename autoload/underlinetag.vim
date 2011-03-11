@@ -15,7 +15,9 @@ let g:loaded_underlinetag = 1
 let s:old_cpo = &cpo
 set cpo&vim
 " }}}
-let s:syn_cmd_format = 'syntax keyword UnderlineTag %s containedin=ALLBUT,.*String.*,.*Comment.*,cIncluded,.*Function.*'
+
+" used to store syntax command for each file of tagfiles()
+let s:syntable = {}
 
 " Function {{{
 "=================================================================
@@ -27,26 +29,21 @@ endfunction "}}}
 
 function! s:gen_syn_cmd(tag_file) "{{{
   let keywords = map(readfile(a:tag_file),'split(v:val,"\t")[0]')
-  return printf(s:syn_cmd_format, join(s:uniq(keywords), " "))
-endfunction "}}}
-
-function! s:underlinetag_syntax_gen(tagfile) "{{{
-  call map(map(tagfiles(), 'fnamemodify(v:val, ":p")'),
-        \ 'let g:underlinetag_syntable[v:val] = s:gen_syn_cmd(v:val)')
+  return printf(g:underlinetag_syntax , join(s:uniq(keywords), " "))
 endfunction "}}}
 
 function! s:execute_highlight() "{{{
   let tagfiles = map(tagfiles(), 'fnamemodify(v:val, ":p")')
   for tagfile in tagfiles
-    if !has_key(g:underlinetag_syntable, tagfile)
-      let g:underlinetag_syntable[tagfile] = s:gen_syn_cmd(tagfile)
+    if !has_key(s:syntable, tagfile)
+      let s:syntable[tagfile] = s:gen_syn_cmd(tagfile)
     endif
   endfor
 
   for tagfile in tagfiles
-    execute 'silent! ' . g:underlinetag_syntable[tagfile]
+    execute 'silent! ' . s:syntable[tagfile]
   endfor
-  exe 'highlight UnderlineTag ' . g:underlinetag_highlight
+  exe g:underlinetag_highlight
 endfunction "}}}
 
 function! underlinetag#toggle() "{{{

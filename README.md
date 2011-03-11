@@ -7,16 +7,11 @@ This mini-plugin provide facility to underline tagged keyword.
 
 How to use?
 ================================
-
-Generate syntax file
+Underline
 ----------------------
+    :UnderlineTagToggle
 
-Following command generate vim syntax file.
-This file is sourced when you call function `UnderlineTagToggle`
-
-    :UnderlineTagGenerate
-
-Underline or Un-Underline
+Crear Underline
 ----------------------
     :UnderlineTagToggle
 
@@ -34,4 +29,14 @@ Set following snippet to your .vimrc
       autocmd!
       autocmd BufEnter *.py UnderlineTagOn
     augroup END
+
+Customize
+-------------------------
+### syntax
+
+    let g:underlinetag_syntax = 'syntax keyword UnderlineTag %s containedin=ALLBUT,.*String.*,.*Comment.*,cIncluded,.*Function.*'
+
+### highligh
+
+    let g:underlinetag_highlight = 'highlight UnderlineTag gui=underline cterm=underline term=underline'
 

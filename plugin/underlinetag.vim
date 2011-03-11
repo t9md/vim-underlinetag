@@ -18,22 +18,13 @@ set cpo&vim
 
 " Init {{{
 "=================================================================
-" used to store syntax command for each file of tagfiles()
-let g:underlinetag_syntable = {}
-
-" controll enabled or disabled globally
-let g:underlinetag = 1
-
-" is used when highlight tagged keyword
-let g:underlinetag_file = exists('g:underlinetag_file')
-      \ ? g:underlinetag_file
-      \ : 'underlinetag_syntax.vim'
-
 let g:underlinetag_highlight = exists('g:underlinetag_highlight')
       \ ? g:underlinetag_highlight
-      \ : 'gui=underline cterm=underline term=underline'
+      \ : 'highlight UnderlineTag gui=underline cterm=underline term=underline'
 
-let s:syn_cmd_format = 'syntax keyword UnderlineTag %s containedin=ALLBUT,.*String.*,.*Comment.*,cIncluded,.*Function.*'
+let g:underlinetag_syntax = exists('g:underlinetag_syntax')
+      \ ? g:underlinetag_syntax
+      \ : 'syntax keyword UnderlineTag %s containedin=ALLBUT,.*String.*,.*Comment.*,cIncluded,.*Function.*'
 "}}}
 
 " Command {{{
