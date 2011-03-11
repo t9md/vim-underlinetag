@@ -1,7 +1,7 @@
 "=============================================================================
 " File: underlinetag.vim
 " Author: t9md <taqumd@gmail.com>
-" Version: 0.2
+" Version: 0.5
 " WebPage: http://github.com/t9md/vim-undelinetag
 " License: BSD
 

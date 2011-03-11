@@ -1,0 +1,99 @@
+*underlinetag.txt*	underline tagged word to know the word hyperlinked
+
+Version: 0.2
+Author : t9md <taqumd@gmail.com>
+
+==============================================================================
+CONTENTS					*underlinetag-contents*
+
+Introduction					|underlinetag-introduction|
+Commands					|underlinetag-commands|
+Variables					|underlinetag-keymap|
+Automatic Underline				|underlinetag-auto|
+Internal					|underlinetag-internal|
+ToDo						|underlinetag-todo|
+Bugs						|underlinetag-bugs|
+Changelog					|underlinetag-changelog|
+
+==============================================================================
+INTRODUCTION					*underlinetag-introduction*
+
+When I use |:tag| or |<C-]| to jump on tagged keyword, I occasionally fail to
+jump because of "tag not found".
+It is difficult to distinguish which word is tagged keywords.
+This plugin *underlinetag* highlight(underline) tagged keywords.
+It helps you to distinguish the word you could jump with |<C-]>|
+
+Requirement:
+- Vim 7.0 or later
+
+Latest Version:
+http://github.com/t9md/vim-underlinetag
+
+==============================================================================
+COMMANDS						*underlinetag-commands*
+
+:UnderlineTagOn       					*:UnderlineTagOn*
+:UnderlineTagOff					*:UnderlineTagOff*
+:UnderlineTagToggle   					*:UnderlineTagToggle*
+
+==============================================================================
+KEYMAP EXAMPLE						*underlinetag-keymap*
+>
+	nnoremap <silent> <Space>] :<C-u>UnderlineTagToggle<CR>
+
+==============================================================================
+VARIABLES						 *underlinetag-variables*
+
+g:underlinetag_syntax					*underlinetag_syntax*
+	used to define syntax dynamically for tagged keyword.
+
+	Default value
+>
+	'syntax keyword UnderlineTag %s containedin=ALLBUT,
+	\.*String.*,.*Comment.*,cIncluded,.*Function.*'
+<
+g:underlinetag_highlight				*underlinetag_highlight*
+	used to highlight tagged keyword.
+
+	Default value
+>
+	"highlight UnderlineTag gui=underline cterm=underline
+	\term=underline"
+
+==============================================================================
+AUTOMATIC UNDERLINE EXAMPLE				*underlinetag-auto*
+
+underline tagged keywords automatically when you enter to python buffer.
+>
+        augroup UnderlineTag
+                autocmd!
+                autocmd BufEnter *.py UnderlineTagOn
+        augroup END
+<
+==============================================================================
+INTERNAL						*underlinetag-internal*
+
+Dynamically define syntax for tagged keyword and highlight.
+Keywords are extracted from |tagfiles()|
+Each dynamically generated syntax is stored to dictionary(s:syntable).
+Data structure of s:syntable dictionary is like bellow.
+>
+	let s:syntable = {}
+	let s:syntable[`full path tag file`] =
+		\"`syntax commands to highlight keywords`"
+<
+
+==============================================================================
+TODO							*underlinetag-todo*
+
+==============================================================================
+BUGS							*underlinetag-bugs*
+
+==============================================================================
+CHANGELOG						*underlinetag-changelog*
+
+0.2	2011-03-12
+	- First release
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:
