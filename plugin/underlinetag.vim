@@ -7,9 +7,9 @@
 
 " GUARD: {{{
 "============================================================
-if exists('g:loaded_underlinetag')
-  finish
-endif
+" if exists('g:loaded_underlinetag')
+  " finish
+" endif
 
 let g:loaded_underlinetag = 1
 let s:old_cpo = &cpo
@@ -27,12 +27,16 @@ if !exists('g:underlinetag_syntax')
 endif
 "}}}
 
+if !exists('g:undelinetag')
+  let g:underlinetag = 1
+endif
 " Command {{{
 "=================================================================
 command! UnderlineTagOn       :call underlinetag#do(1)
-command! UnderlineTagForce    :call underlinetag#force()
 command! UnderlineTagOff      :call underlinetag#do(0)
 command! UnderlineTagToggle   :call underlinetag#toggle()
+command! UnderlineDisable     exe 'let g:underlinetag=0 | call underlinetag#do(0)'
+command! UnderlineEnable      exe 'let g:underlinetag=1'
 " }}}
 
 let &cpo = s:old_cpo
