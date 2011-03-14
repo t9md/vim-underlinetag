@@ -18,13 +18,13 @@ set cpo&vim
 
 " Init {{{
 "=================================================================
-let g:underlinetag_highlight = exists('g:underlinetag_highlight')
-      \ ? g:underlinetag_highlight
-      \ : 'highlight UnderlineTag gui=underline cterm=underline term=underline'
+if !exists('g:underlinetag_highlight')
+  let g:underlinetag_highlight = 'highlight UnderlineTag gui=underline cterm=underline term=underline'
+endif
 
-let g:underlinetag_syntax = exists('g:underlinetag_syntax')
-      \ ? g:underlinetag_syntax
-      \ : 'syntax keyword UnderlineTag %s containedin=ALLBUT,.*String.*,.*Comment.*,cIncluded,.*Function.*'
+if !exists('g:underlinetag_syntax')
+  let g:underlinetag_syntax = 'syntax keyword UnderlineTag %s containedin=ALLBUT,.*String.*,.*Comment.*,cIncluded,.*Function.*'
+endif
 "}}}
 
 " Command {{{
