@@ -32,14 +32,13 @@ function! s:gen_syn_cmd(tag_file) "{{{
   return printf(g:underlinetag_syntax , join(s:uniq(keywords), " "))
 endfunction "}}}
 
-function! s:execute_highlight() "{{{
+function! s:execute_highlight(nocache) "{{{
   let tagfiles = map(tagfiles(), 'fnamemodify(v:val, ":p")')
   for tagfile in tagfiles
-    if !has_key(s:syntable, tagfile)
+    if a:nocache || !has_key(s:syntable, tagfile)
       let s:syntable[tagfile] = s:gen_syn_cmd(tagfile)
     endif
   endfor
-
   for tagfile in tagfiles
     execute 'silent! ' . s:syntable[tagfile]
   endfor
@@ -47,22 +46,24 @@ function! s:execute_highlight() "{{{
 endfunction "}}}
 
 function! underlinetag#toggle() "{{{
-  " if g:underlinetag == 0 | return | endif
   if !exists('b:underlinetag') | let b:underlinetag = 0 | endif
   call underlinetag#do(!b:underlinetag)
 endfunction "}}}
 
 function! underlinetag#do(flag) "{{{
-  " if g:underlinetag == 0 | return | endif
   if a:flag == 1
-    call s:execute_highlight()
+    call s:execute_highlight(0)
     let status = 1
   else
     syn clear UnderlineTag
     let status = 0
   endif
   let b:underlinetag = status
-  return status
+endfunction "}}}
+
+function! underlinetag#force() "{{{
+  call s:execute_highlight(1)
+  let b:underlinetag = 1
 endfunction "}}}
 "}}}
 

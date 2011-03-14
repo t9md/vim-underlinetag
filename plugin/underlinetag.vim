@@ -30,6 +30,7 @@ endif
 " Command {{{
 "=================================================================
 command! UnderlineTagOn       :call underlinetag#do(1)
+command! UnderlineTagForce    :call underlinetag#force()
 command! UnderlineTagOff      :call underlinetag#do(0)
 command! UnderlineTagToggle   :call underlinetag#toggle()
 " }}}
