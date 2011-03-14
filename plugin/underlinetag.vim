@@ -35,8 +35,8 @@ endif
 command! UnderlineTagOn       :call underlinetag#do(1)
 command! UnderlineTagOff      :call underlinetag#do(0)
 command! UnderlineTagToggle   :call underlinetag#toggle()
-command! UnderlineDisable     exe 'let g:underlinetag=0 | call underlinetag#do(0)'
-command! UnderlineEnable      exe 'let g:underlinetag=1'
+command! UnderlineTagDisable  exe 'let g:underlinetag=0 | call underlinetag#do(0)'
+command! UnderlineTagEnable   exe 'let g:underlinetag=1'
 " }}}
 
 let &cpo = s:old_cpo
