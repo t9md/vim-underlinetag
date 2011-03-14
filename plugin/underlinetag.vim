@@ -30,6 +30,10 @@ endif
 if !exists('g:undelinetag')
   let g:underlinetag = 1
 endif
+if !exists('g:undelinetag_autoupdate')
+  let g:underlinetag_autoupdate = 0
+endif
+
 " Command {{{
 "=================================================================
 command! UnderlineTagOn       :call underlinetag#do(1)
