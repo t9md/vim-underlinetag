@@ -7,9 +7,11 @@
 
 " GUARD: {{{
 "============================================================
-" if exists('g:loaded_underlinetag')
-  " finish
-" endif
+if exists('g:loaded_underlinetag') &&
+      \ exists("g:underlinetag_dev") &&
+      \ !g:underlinetag_dev
+  finish
+endif
 
 let g:loaded_underlinetag = 1
 let s:old_cpo = &cpo
@@ -27,6 +29,7 @@ function! s:uniq(list) "{{{
   return keys(dic)
 endfunction "}}}
 
+let s:underlinetag_ids = []
 function! s:gen_syn_cmd(tag_file) "{{{
   let keywords = map(readfile(a:tag_file),'split(v:val,"\t")[0]')
   return printf(g:underlinetag_syntax , join(s:uniq(keywords), " "))
